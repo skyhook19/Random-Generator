@@ -27,6 +27,7 @@ public class MainApp extends Application {
             ClientLoginController controller = loader.getController();
             controller.setMainWindow(primaryStage);
             Scene scene = new Scene(rootLayout);
+            primaryStage.setTitle("Вход");
             primaryStage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();

@@ -11,8 +11,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafxLogic.controller.AbstractController;
-
 import java.io.IOException;
+import static javafxLogic.constants.Errors.*;
 
 public class ClientLoginController extends AbstractController{
 
@@ -59,10 +59,10 @@ public class ClientLoginController extends AbstractController{
         String password = passwordField.getText();
 
         if (login == null || login.length() == 0) {
-            errorMessage += "Login is not valid!\n";
+            errorMessage +=  WRONG_LOGIN + "\n";
         }
         if (password == null || password.length() == 0) {
-            errorMessage += "Password is not valid!\n";
+            errorMessage += WRONG_PASSWORD + "\n";
         }
 
         return errorMessage;
@@ -76,6 +76,7 @@ public class ClientLoginController extends AbstractController{
             MethodsWindowController controller = loader.getController();
             controller.setMainWindow(primaryStage);
             Scene scene = new Scene(rootLayout);
+            primaryStage.setTitle("Генератор случайных чисел");
             primaryStage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();

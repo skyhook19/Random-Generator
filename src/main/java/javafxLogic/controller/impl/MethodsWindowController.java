@@ -1,31 +1,56 @@
 package javafxLogic.controller.impl;
 
+import algorithmLogic.DefaultRandom;
+import algorithmLogic.RandomAlgorithm;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafxLogic.controller.AbstractController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import static javafxLogic.controller.Regions.*;
+import static javafxLogic.constants.Regions.*;
+import static javafxLogic.constants.Errors.*;
 
 public class MethodsWindowController extends AbstractController{
 
+    /*
     @FXML
     private ComboBox methodCheckBox;
     @FXML
     private ComboBox intervalCheckBox;
+    private String chosenMethod = "";
+    */
+
+    @FXML
+    private TextField selectionSize;
+    private String chosenSelectionSize = "";
+
     @FXML
     private BarChart barChart;
 
-    private String chosenMethod = "";
-    private String chosenInterval = "";
+    private HashMap<String, RandomAlgorithm> algorithms;
 
     protected void initialize() {
-        methodCheckBox.getItems().addAll("Рандом", "Фон-Неймана", "Метод 3", "Метод 4");
-        intervalCheckBox.getItems().addAll("50", "500", "1000", "5000", "25000", "50000");
+        algorithms = new HashMap<String, RandomAlgorithm>(){{
+            put("Стандартный рандом",new DefaultRandom());
+            put("Метод Фон-Неймана",new DefaultRandom());
+            put("Метод 3",new DefaultRandom());
+            put("Метод 4",new DefaultRandom());
+        }};
+
+        selectionSize.textProperty().addListener(
+                (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                    if (!newValue.matches("\\d*")) {
+                        selectionSize.setText(newValue.replaceAll("[^\\d]", ""));
+                    }
+                });
     }
 
     @FXML
@@ -36,67 +61,64 @@ public class MethodsWindowController extends AbstractController{
             showValidationError(error);
             return;
         }
-        if(!comboBoxesChanged()) return;
+        if(!doesSelectionSizeChanged()) return;
 
-        chosenMethod = methodCheckBox.getSelectionModel().getSelectedItem().toString();
-        chosenInterval = intervalCheckBox.getSelectionModel().getSelectedItem().toString();
-        drawBars(new ArrayList<>());
+        chosenSelectionSize = selectionSize.getText();
+        barChart.getData().clear();
+
+        for (Map.Entry<String, RandomAlgorithm> entry: algorithms.entrySet()){
+            RandomAlgorithm algorithm = entry.getValue();
+            drawBars(algorithm.run(Integer.parseInt(chosenSelectionSize)), entry.getKey());
+        }
+
     }
 
-    private void drawBars(List<Integer> countOfEntrance){
+    private void drawBars(int[] countOfEntrance, String name){
         barChart.getXAxis().setAnimated(false);
         barChart.getYAxis().setAnimated(false);
         barChart.getXAxis().setLabel("Интервалы");
         barChart.getYAxis().setLabel("Число вхождений");
 
         XYChart.Series series1 = new XYChart.Series();
-        series1.getData().add(new XYChart.Data(one, 25601.34));
-        series1.getData().add(new XYChart.Data(two, 20148.82));
-        series1.getData().add(new XYChart.Data(three, 10000));
-        series1.getData().add(new XYChart.Data(four, 35407.15));
-        series1.getData().add(new XYChart.Data(five, 12000));
-        series1.getData().add(new XYChart.Data(six, 25601.34));
-        series1.getData().add(new XYChart.Data(seven, 20148.82));
-        series1.getData().add(new XYChart.Data(eight, 10000));
-        series1.getData().add(new XYChart.Data(nine, 35407.15));
-        series1.getData().add(new XYChart.Data(ten, 12000));
-        series1.getData().add(new XYChart.Data(eleven, 25601.34));
-        series1.getData().add(new XYChart.Data(twelve, 20148.82));
-        series1.getData().add(new XYChart.Data(thirteen, 10000));
-        series1.getData().add(new XYChart.Data(fourteen, 35407.15));
-        series1.getData().add(new XYChart.Data(fifteen, 12000));
-        series1.getData().add(new XYChart.Data(sixteen, 25601.34));
-        series1.getData().add(new XYChart.Data(seventeen, 20148.82));
-        series1.getData().add(new XYChart.Data(eighteen, 10000));
-        series1.getData().add(new XYChart.Data(nineteen, 35407.15));
-        series1.getData().add(new XYChart.Data(twenty, 12000));
+        series1.setName(name);
+        series1.getData().add(new XYChart.Data(ONE, countOfEntrance[0]));
+        series1.getData().add(new XYChart.Data(TWO, countOfEntrance[1]));
+        series1.getData().add(new XYChart.Data(THREE, countOfEntrance[2]));
+        series1.getData().add(new XYChart.Data(FOUR, countOfEntrance[3]));
+        series1.getData().add(new XYChart.Data(FIVE, countOfEntrance[4]));
+        series1.getData().add(new XYChart.Data(SIX, countOfEntrance[5]));
+        series1.getData().add(new XYChart.Data(SEVEN, countOfEntrance[6]));
+        series1.getData().add(new XYChart.Data(EIGHT, countOfEntrance[7]));
+        series1.getData().add(new XYChart.Data(NINE, countOfEntrance[8]));
+        series1.getData().add(new XYChart.Data(TEN, countOfEntrance[9]));
+        series1.getData().add(new XYChart.Data(ELEVEN, countOfEntrance[10]));
+        series1.getData().add(new XYChart.Data(TWELVE, countOfEntrance[11]));
+        series1.getData().add(new XYChart.Data(THIRTEEN, countOfEntrance[12]));
+        series1.getData().add(new XYChart.Data(FOURTEEN, countOfEntrance[13]));
+        series1.getData().add(new XYChart.Data(FIFTEEN, countOfEntrance[14]));
+        series1.getData().add(new XYChart.Data(SIXTEEN, countOfEntrance[15]));
+        series1.getData().add(new XYChart.Data(SEVENTEEN, countOfEntrance[16]));
+        series1.getData().add(new XYChart.Data(EIGHTEEN, countOfEntrance[17]));
+        series1.getData().add(new XYChart.Data(NINETEEN, countOfEntrance[18]));
+        series1.getData().add(new XYChart.Data(TWENTY, countOfEntrance[19]));
 
-
-        barChart.getData().clear();
         barChart.getData().add(series1);
-        barChart.lookupAll(".default-color0.chart-bar").forEach(n -> n.setStyle("-fx-bar-fill: #08E8DE;"));
     }
 
     @Override
     protected String isInputValid() {
         String error = "";
+        String input = selectionSize.getText();
 
-        if(methodCheckBox.getSelectionModel().getSelectedItem() == null){
-            error += "You should choose method!\n";
-        }
-        if(intervalCheckBox.getSelectionModel().getSelectedItem() == null){
-            error += "You should choose interval!\n";
-        }
+        if(input.isEmpty()) error += SELECTION_SIZE_IS_EMPTY + "\n";
+        else if(input.startsWith("0")) error += NUMBER_STARTS_WITH_ZERO + "\n";
+        else if(Integer.parseInt(input) > 50000) error += SELECTION_SIZE_IS_TOO_BIG + "\n";
 
         return error;
     }
 
-    private boolean comboBoxesChanged(){
-       if(methodCheckBox.getSelectionModel().getSelectedItem().toString().equals(chosenMethod)
-               && intervalCheckBox.getSelectionModel().getSelectedItem().toString().equals(chosenInterval)){
-           return false;
-       }
-
-       return true;
+    private boolean doesSelectionSizeChanged(){
+       if(selectionSize.getText().equals(chosenSelectionSize)) return false;
+       else return true;
     }
 }

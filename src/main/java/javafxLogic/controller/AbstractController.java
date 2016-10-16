@@ -2,6 +2,7 @@ package javafxLogic.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public abstract class AbstractController {
@@ -24,8 +25,9 @@ public abstract class AbstractController {
     protected void showValidationError(String errorMessage){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.initOwner(mainWindow);
-        alert.setTitle("Invalid input");
-        alert.setContentText(errorMessage);
+        alert.setTitle("Ошибка");
+        alert.setHeaderText("Неправильный ввод!");
+        alert.getDialogPane().setContent(new Label(errorMessage));
         alert.showAndWait();
     }
 }
