@@ -71,6 +71,8 @@ public class MethodsWindowController extends AbstractController{
         series1.getData().add(new XYChart.Data(nineteen, 35407.15));
         series1.getData().add(new XYChart.Data(twenty, 12000));
 
+
+        barChart.getData().clear();
         barChart.getData().add(series1);
         barChart.lookupAll(".default-color0.chart-bar").forEach(n -> n.setStyle("-fx-bar-fill: #08E8DE;"));
     }
