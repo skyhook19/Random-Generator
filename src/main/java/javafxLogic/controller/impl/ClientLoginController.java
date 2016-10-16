@@ -2,14 +2,17 @@ package javafxLogic.controller.impl;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafxLogic.controller.AbstractController;
+
+import java.io.IOException;
 
 public class ClientLoginController extends AbstractController{
 
@@ -17,10 +20,6 @@ public class ClientLoginController extends AbstractController{
     private TextField loginTextField;
     @FXML
     private PasswordField passwordField;
-    @FXML
-    private Button loginBtn;
-    @FXML
-    private Button cancelBtn;
 
     @FXML
     protected void initialize() {
@@ -38,9 +37,8 @@ public class ClientLoginController extends AbstractController{
     }
 
     @FXML
-    private void handleCancel() {
-        Stage stage = (Stage) mainWindow.getScene().getWindow();
-        stage.close();
+    private void handleCancel(){
+        mainWindow.close();
     }
 
     @FXML
@@ -51,9 +49,11 @@ public class ClientLoginController extends AbstractController{
             showValidationError(errorMessage);
             return;
         }
+
+        setMethodsWindowScene(mainWindow);
     }
 
-    private String isInputValid() {
+    protected String isInputValid() {
         String errorMessage = "";
         String login = loginTextField.getText();
         String password = passwordField.getText();
@@ -68,11 +68,17 @@ public class ClientLoginController extends AbstractController{
         return errorMessage;
     }
 
-    private void showValidationError(String errorMessage){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.initOwner(mainWindow.getScene().getWindow());
-        alert.setTitle("Invalid Fields");
-        alert.setContentText(errorMessage);
-        alert.showAndWait();
+    public void setMethodsWindowScene(Stage primaryStage) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(ClientLoginController.class.getResource("/fxml/MethodsWindow.fxml"));
+            Pane rootLayout = loader.load();
+            MethodsWindowController controller = loader.getController();
+            controller.setMainWindow(primaryStage);
+            Scene scene = new Scene(rootLayout);
+            primaryStage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

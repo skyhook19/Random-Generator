@@ -24,6 +24,8 @@ public class MainApp extends Application {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("/fxml/ClientLoginWindow.fxml"));
             Pane rootLayout = loader.load();
+            ClientLoginController controller = loader.getController();
+            controller.setMainWindow(primaryStage);
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
         } catch (IOException e) {
