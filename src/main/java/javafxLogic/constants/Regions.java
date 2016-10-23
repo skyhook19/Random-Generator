@@ -21,5 +21,4 @@ public interface Regions {
     String EIGHTEEN = "0,85-0,9";
     String NINETEEN = "0,9-0,95";
     String TWENTY = "0,95-1";
-
 }

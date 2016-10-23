@@ -2,7 +2,6 @@ package javafxLogic.controller.impl;
 
 import algorithmLogic.DefaultRandom;
 import algorithmLogic.RandomAlgorithm;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
@@ -10,15 +9,13 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.TextField;
 import javafxLogic.controller.AbstractController;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import static javafxLogic.constants.Regions.*;
 import static javafxLogic.constants.Errors.*;
+import static javafxLogic.constants.Regions.*;
 
-public class MethodsWindowController extends AbstractController{
+public class MethodsWindowController extends AbstractController {
 
     /*
     @FXML
@@ -38,11 +35,11 @@ public class MethodsWindowController extends AbstractController{
     private HashMap<String, RandomAlgorithm> algorithms;
 
     protected void initialize() {
-        algorithms = new HashMap<String, RandomAlgorithm>(){{
-            put("Стандартный рандом",new DefaultRandom());
-            put("Метод Фон-Неймана",new DefaultRandom());
-            put("Метод 3",new DefaultRandom());
-            put("Метод 4",new DefaultRandom());
+        algorithms = new HashMap<String, RandomAlgorithm>() {{
+            put("Стандартный рандом", new DefaultRandom());
+            put("Метод Фон-Неймана", new DefaultRandom());
+            put("Метод 3", new DefaultRandom());
+            put("Метод 4", new DefaultRandom());
         }};
 
         selectionSize.textProperty().addListener(
@@ -54,26 +51,26 @@ public class MethodsWindowController extends AbstractController{
     }
 
     @FXML
-    private void handleGenerateBtn(){
+    private void handleGenerateBtn() {
         String error = isInputValid();
 
-        if(!isInputValid().isEmpty()){
+        if (!isInputValid().isEmpty()) {
             showValidationError(error);
             return;
         }
-        if(!doesSelectionSizeChanged()) return;
-
+        if (!doesSelectionSizeChanged()) {
+            return;
+        }
         chosenSelectionSize = selectionSize.getText();
         barChart.getData().clear();
 
-        for (Map.Entry<String, RandomAlgorithm> entry: algorithms.entrySet()){
+        for (Map.Entry<String, RandomAlgorithm> entry : algorithms.entrySet()) {
             RandomAlgorithm algorithm = entry.getValue();
             drawBars(algorithm.run(Integer.parseInt(chosenSelectionSize)), entry.getKey());
         }
-
     }
 
-    private void drawBars(int[] countOfEntrance, String name){
+    private void drawBars(int[] countOfEntrance, String name) {
         barChart.getXAxis().setAnimated(false);
         barChart.getYAxis().setAnimated(false);
         barChart.getXAxis().setLabel("Интервалы");
@@ -110,15 +107,14 @@ public class MethodsWindowController extends AbstractController{
         String error = "";
         String input = selectionSize.getText();
 
-        if(input.isEmpty()) error += SELECTION_SIZE_IS_EMPTY + "\n";
-        else if(input.startsWith("0")) error += NUMBER_STARTS_WITH_ZERO + "\n";
-        else if(Integer.parseInt(input) > 50000) error += SELECTION_SIZE_IS_TOO_BIG + "\n";
+        if (input.isEmpty()) error += SELECTION_SIZE_IS_EMPTY + "\n";
+        else if (input.startsWith("0")) error += NUMBER_STARTS_WITH_ZERO + "\n";
+        else if (Integer.parseInt(input) > 50000) error += SELECTION_SIZE_IS_TOO_BIG + "\n";
 
         return error;
     }
 
-    private boolean doesSelectionSizeChanged(){
-       if(selectionSize.getText().equals(chosenSelectionSize)) return false;
-       else return true;
+    private boolean doesSelectionSizeChanged() {
+        return !selectionSize.getText().equals(chosenSelectionSize);
     }
 }

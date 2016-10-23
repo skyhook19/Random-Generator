@@ -33,6 +33,4 @@ public class MainApp extends Application {
             e.printStackTrace();
         }
     }
-
-
 }

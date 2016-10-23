@@ -7,7 +7,8 @@ import javafx.stage.Stage;
 
 public abstract class AbstractController {
 
-    @FXML protected Stage mainWindow;
+    @FXML
+    protected Stage mainWindow;
 
     @FXML
     protected abstract void initialize();
@@ -22,11 +23,11 @@ public abstract class AbstractController {
 
     protected abstract String isInputValid();
 
-    protected void showValidationError(String errorMessage){
+    protected void showValidationError(String errorMessage) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.initOwner(mainWindow);
         alert.setTitle("Ошибка");
-        alert.setHeaderText("Неправильный ввод!");
+//        alert.setHeaderText("Неправильный ввод!");
         alert.getDialogPane().setContent(new Label(errorMessage));
         alert.showAndWait();
     }
