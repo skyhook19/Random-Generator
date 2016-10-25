@@ -8,9 +8,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxLogic.controller.impl.MethodsWindowController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxLogic.controller.impl.MethodsWindowController">
    <children>
-      <BarChart fx:id="barChart" legendVisible="true" prefHeight="600.0" prefWidth="1000.0">
+      <BarChart fx:id="defaultMethodBar" legendVisible="true" prefHeight="350.0" prefWidth="600.0">
         <xAxis>
           <CategoryAxis side="BOTTOM" />
         </xAxis>
@@ -21,8 +21,32 @@
       <!--<ComboBox fx:id="methodCheckBox" layoutX="75.0" layoutY="630.0" prefWidth="150.0" />
       <ComboBox fx:id="intervalCheckBox" layoutX="275.0" layoutY="630.0" prefWidth="150.0" />
       <Label alignment="CENTER" layoutX="75.0" layoutY="600.0" prefHeight="16.0" prefWidth="150.0" text="Выберите метод:" />-->
-      <Label alignment="CENTER" layoutX="50.0" layoutY="642.0" prefHeight="16.0" prefWidth="207.0" text="Введите размер выборки:" />
-      <Button fx:id="generateBtn" layoutX="700.0" layoutY="620.0" mnemonicParsing="false" onAction="#handleGenerateBtn" prefHeight="60.0" prefWidth="200.0" text="Сгенерировать" />
-      <TextField fx:id="selectionSize" layoutX="276.0" layoutY="637.0" />
+      <Label alignment="CENTER" layoutX="50.0" layoutY="742.0" prefHeight="16.0" prefWidth="207.0" text="Введите размер выборки:" />
+      <Button fx:id="generateBtn" layoutX="700.0" layoutY="720.0" mnemonicParsing="false" onAction="#handleGenerateBtn" prefHeight="60.0" prefWidth="200.0" text="Сгенерировать" />
+      <TextField fx:id="selectionSize" layoutX="276.0" layoutY="737.0" />
+      <BarChart fx:id="bar3" layoutY="350.0" legendVisible="true" prefHeight="350.0" prefWidth="600.0">
+         <xAxis>
+            <CategoryAxis side="BOTTOM" />
+         </xAxis>
+         <yAxis>
+            <NumberAxis side="LEFT" />
+         </yAxis>
+      </BarChart>
+      <BarChart fx:id="fonNeumannBar" layoutX="600.0" legendVisible="true" prefHeight="350.0" prefWidth="600.0">
+         <xAxis>
+            <CategoryAxis side="BOTTOM" />
+         </xAxis>
+         <yAxis>
+            <NumberAxis side="LEFT" />
+         </yAxis>
+      </BarChart>
+      <BarChart fx:id="bar4" layoutX="600.0" layoutY="350.0" legendVisible="true" prefHeight="350.0" prefWidth="600.0">
+         <xAxis>
+            <CategoryAxis side="BOTTOM" />
+         </xAxis>
+         <yAxis>
+            <NumberAxis side="LEFT" />
+         </yAxis>
+      </BarChart>
    </children>
 </Pane>

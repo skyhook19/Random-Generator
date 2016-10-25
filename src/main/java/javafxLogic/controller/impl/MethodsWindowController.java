@@ -9,8 +9,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.TextField;
 import javafxLogic.controller.AbstractController;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static javafxLogic.constants.Errors.*;
 import static javafxLogic.constants.Regions.*;
@@ -30,16 +29,40 @@ public class MethodsWindowController extends AbstractController {
     private String chosenSelectionSize = "";
 
     @FXML
-    private BarChart barChart;
+    private BarChart defaultMethodBar;
+    @FXML
+    private BarChart fonNeumannBar;
+    @FXML
+    private BarChart bar3;
+    @FXML
+    private BarChart bar4;
 
-    private HashMap<String, RandomAlgorithm> algorithms;
+
+    private List<BarChart> charts;
+    private List<RandomAlgorithm> algorithms;
+    private List<String> descriptions;
 
     protected void initialize() {
-        algorithms = new HashMap<String, RandomAlgorithm>() {{
-            put("Стандартный рандом", new DefaultRandom());
-            put("Метод Фон-Неймана", new DefaultRandom());
-            put("Метод 3", new DefaultRandom());
-            put("Метод 4", new DefaultRandom());
+
+        charts = new ArrayList<BarChart>(){{
+            add(defaultMethodBar);
+            add(fonNeumannBar);
+            add(bar3);
+            add(bar4);
+        }};
+
+        algorithms = new ArrayList<RandomAlgorithm>(){{
+            add(new DefaultRandom());
+            add(new DefaultRandom());
+            add(new DefaultRandom());
+            add(new DefaultRandom());
+        }};
+
+        descriptions = new ArrayList<String>(){{
+            add("Стандартный рандом");
+            add("Фон-Неймана");
+            add("Метод 3");
+            add("Метод 4");
         }};
 
         selectionSize.textProperty().addListener(
@@ -61,21 +84,21 @@ public class MethodsWindowController extends AbstractController {
         if (!doesSelectionSizeChanged()) {
             return;
         }
-        chosenSelectionSize = selectionSize.getText();
-        barChart.getData().clear();
 
-        for (Map.Entry<String, RandomAlgorithm> entry : algorithms.entrySet()) {
-            RandomAlgorithm algorithm = entry.getValue();
-            drawBars(algorithm.run(Integer.parseInt(chosenSelectionSize)), entry.getKey());
+        chosenSelectionSize = selectionSize.getText();
+        defaultMethodBar.getData().clear();
+
+        for (int i = 0; i < charts.size(); i++) {
+            drawBars(algorithms.get(i).run(Integer.parseInt(chosenSelectionSize)), charts.get(i), descriptions.get(i));
         }
     }
 
-    private void drawBars(int[] countOfEntrance, String name) {
-        barChart.getXAxis().setAnimated(false);
-        barChart.getYAxis().setAnimated(false);
-        barChart.getXAxis().setLabel("Интервалы");
-        barChart.getYAxis().setLabel("Число вхождений");
-
+    private void drawBars(int[] countOfEntrance, BarChart bar, String name) {
+        bar.getXAxis().setAnimated(false);
+        bar.getYAxis().setAnimated(false);
+        bar.getXAxis().setLabel("Интервалы");
+        bar.getYAxis().setLabel("Число вхождений");
+        bar.setBarGap(1);
         XYChart.Series series1 = new XYChart.Series();
         series1.setName(name);
         series1.getData().add(new XYChart.Data(ONE, countOfEntrance[0]));
@@ -99,7 +122,7 @@ public class MethodsWindowController extends AbstractController {
         series1.getData().add(new XYChart.Data(NINETEEN, countOfEntrance[18]));
         series1.getData().add(new XYChart.Data(TWENTY, countOfEntrance[19]));
 
-        barChart.getData().add(series1);
+        bar.getData().add(series1);
     }
 
     @Override

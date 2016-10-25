@@ -17,6 +17,7 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) {
         setLoginWindowScene(primaryStage);
         primaryStage.show();
+        primaryStage.setResizable(false);
     }
 
     public void setLoginWindowScene(Stage primaryStage) {
