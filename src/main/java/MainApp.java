@@ -20,7 +20,7 @@ public class MainApp extends Application {
         primaryStage.setResizable(false);
     }
 
-    public void setLoginWindowScene(Stage primaryStage) {
+    private void setLoginWindowScene(Stage primaryStage) {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("/fxml/ClientLoginWindow.fxml"));
