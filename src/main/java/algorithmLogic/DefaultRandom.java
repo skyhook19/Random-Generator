@@ -6,7 +6,7 @@ public class DefaultRandom implements RandomAlgorithm {
 
     public int[] run(int numOfIterations) {
         int[] array = new int[20];
-        Arrays.fill(array, 1);
+        Arrays.fill(array, 0);
         for (int i = 0; i < numOfIterations; i++) {
             double randomVal = Math.random();
             int index = RandomUtils.getIndexByValue(randomVal);

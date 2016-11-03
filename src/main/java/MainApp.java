@@ -17,9 +17,10 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) {
         setLoginWindowScene(primaryStage);
         primaryStage.show();
+        primaryStage.setResizable(false);
     }
 
-    public void setLoginWindowScene(Stage primaryStage) {
+    private void setLoginWindowScene(Stage primaryStage) {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("/fxml/ClientLoginWindow.fxml"));
@@ -27,11 +28,10 @@ public class MainApp extends Application {
             ClientLoginController controller = loader.getController();
             controller.setMainWindow(primaryStage);
             Scene scene = new Scene(rootLayout);
+            primaryStage.setTitle("Вход");
             primaryStage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-
 }

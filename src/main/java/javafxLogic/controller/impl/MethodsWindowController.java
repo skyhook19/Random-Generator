@@ -1,102 +1,123 @@
 package javafxLogic.controller.impl;
 
+import algorithmLogic.DefaultRandom;
+import algorithmLogic.RandomAlgorithm;
+import algorithmLogic.VonNeumannAlgorithm;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafxLogic.controller.AbstractController;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import static javafxLogic.controller.Regions.*;
+import static javafxLogic.constants.Errors.*;
+import static javafxLogic.constants.Regions.*;
 
-public class MethodsWindowController extends AbstractController{
+public class MethodsWindowController extends AbstractController {
 
     @FXML
-    private ComboBox methodCheckBox;
-    @FXML
-    private ComboBox intervalCheckBox;
-    @FXML
-    private BarChart barChart;
+    private TextField selectionSize;
+    private String chosenSelectionSize = "";
 
-    private String chosenMethod = "";
-    private String chosenInterval = "";
+    @FXML
+    private BarChart defaultMethodBar;
+    @FXML
+    private BarChart fonNeumannBar;
+    @FXML
+    private BarChart bar3;
+    @FXML
+    private BarChart bar4;
+
+    private List<BarChart> charts;
+    private List<RandomAlgorithm> algorithms;
+    private List<String> descriptions;
 
     protected void initialize() {
-        methodCheckBox.getItems().addAll("Рандом", "Фон-Неймана", "Метод 3", "Метод 4");
-        intervalCheckBox.getItems().addAll("50", "500", "1000", "5000", "25000", "50000");
+
+        charts = new ArrayList<BarChart>() {{
+            add(defaultMethodBar);
+            add(fonNeumannBar);
+            add(bar3);
+            add(bar4);
+        }};
+
+        algorithms = new ArrayList<RandomAlgorithm>() {{
+            add(new DefaultRandom());
+            add(new VonNeumannAlgorithm());
+            add(new DefaultRandom());
+            add(new DefaultRandom());
+        }};
+
+        descriptions = new ArrayList<String>() {{
+            add("Стандартный рандом");
+            add("Фон-Неймана");
+            add("Линейный конгруэнтный");
+            add("Метод половинных квадратов");
+        }};
+
+        selectionSize.textProperty().addListener(
+                (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                    if (!newValue.matches("\\d*")) {
+                        selectionSize.setText(newValue.replaceAll("[^\\d]", ""));
+                    }
+                });
     }
 
     @FXML
-    private void handleGenerateBtn(){
+    private void handleGenerateBtn() {
         String error = isInputValid();
 
-        if(!isInputValid().isEmpty()){
+        if (!isInputValid().isEmpty()) {
             showValidationError(error);
             return;
         }
-        if(!comboBoxesChanged()) return;
+        if (!doesSelectionSizeChanged()) {
+            return;
+        }
 
-        chosenMethod = methodCheckBox.getSelectionModel().getSelectedItem().toString();
-        chosenInterval = intervalCheckBox.getSelectionModel().getSelectedItem().toString();
-        drawBars(new ArrayList<>());
+        chosenSelectionSize = selectionSize.getText();
+
+        for (int i = 0; i < charts.size(); i++) {
+            charts.get(i).getData().clear();
+            drawBars(algorithms.get(i).run(Integer.parseInt(chosenSelectionSize)), charts.get(i), descriptions.get(i));
+        }
     }
 
-    private void drawBars(List<Integer> countOfEntrance){
-        barChart.getXAxis().setAnimated(false);
-        barChart.getYAxis().setAnimated(false);
-        barChart.getXAxis().setLabel("Интервалы");
-        barChart.getYAxis().setLabel("Число вхождений");
-
+    private void drawBars(int[] countOfEntrance, BarChart bar, String name) {
+        bar.getXAxis().setAnimated(false);
+        bar.getYAxis().setAnimated(false);
+        bar.getXAxis().setLabel("Интервалы");
+        bar.getYAxis().setLabel("Число вхождений");
+        bar.setBarGap(1);
         XYChart.Series series1 = new XYChart.Series();
-        series1.getData().add(new XYChart.Data(one, 25601.34));
-        series1.getData().add(new XYChart.Data(two, 20148.82));
-        series1.getData().add(new XYChart.Data(three, 10000));
-        series1.getData().add(new XYChart.Data(four, 35407.15));
-        series1.getData().add(new XYChart.Data(five, 12000));
-        series1.getData().add(new XYChart.Data(six, 25601.34));
-        series1.getData().add(new XYChart.Data(seven, 20148.82));
-        series1.getData().add(new XYChart.Data(eight, 10000));
-        series1.getData().add(new XYChart.Data(nine, 35407.15));
-        series1.getData().add(new XYChart.Data(ten, 12000));
-        series1.getData().add(new XYChart.Data(eleven, 25601.34));
-        series1.getData().add(new XYChart.Data(twelve, 20148.82));
-        series1.getData().add(new XYChart.Data(thirteen, 10000));
-        series1.getData().add(new XYChart.Data(fourteen, 35407.15));
-        series1.getData().add(new XYChart.Data(fifteen, 12000));
-        series1.getData().add(new XYChart.Data(sixteen, 25601.34));
-        series1.getData().add(new XYChart.Data(seventeen, 20148.82));
-        series1.getData().add(new XYChart.Data(eighteen, 10000));
-        series1.getData().add(new XYChart.Data(nineteen, 35407.15));
-        series1.getData().add(new XYChart.Data(twenty, 12000));
+        series1.setName(name);
 
-
-        barChart.getData().clear();
-        barChart.getData().add(series1);
-        barChart.lookupAll(".default-color0.chart-bar").forEach(n -> n.setStyle("-fx-bar-fill: #08E8DE;"));
+        for (int i = 0; i < 20; i++) {
+            String title = REGIONS.get(i);
+            series1.getData().add(new XYChart.Data(title, countOfEntrance[i]));
+        }
+        bar.getData().add(series1);
     }
 
     @Override
     protected String isInputValid() {
         String error = "";
+        String input = selectionSize.getText();
 
-        if(methodCheckBox.getSelectionModel().getSelectedItem() == null){
-            error += "You should choose method!\n";
-        }
-        if(intervalCheckBox.getSelectionModel().getSelectedItem() == null){
-            error += "You should choose interval!\n";
-        }
+        if (input.isEmpty()) error += SELECTION_SIZE_IS_EMPTY + "\n";
+        else if (input.startsWith("0")) error += NUMBER_STARTS_WITH_ZERO + "\n";
+        else if (Integer.parseInt(input) > 50000) error += SELECTION_SIZE_IS_TOO_BIG + "\n";
 
         return error;
     }
 
-    private boolean comboBoxesChanged(){
-       if(methodCheckBox.getSelectionModel().getSelectedItem().toString().equals(chosenMethod)
-               && intervalCheckBox.getSelectionModel().getSelectedItem().toString().equals(chosenInterval)){
-           return false;
-       }
+    private boolean doesSelectionSizeChanged() {
+        return !selectionSize.getText().equals(chosenSelectionSize);
+    }
 
-       return true;
+    private double computeDispersion(int[] countOfEntrance) {
+        return 0;
     }
 }
