@@ -24,7 +24,7 @@
                text="Введите размер выборки:"/>
         <Button fx:id="generateBtn" layoutX="700.0" layoutY="720.0" mnemonicParsing="false"
                 onAction="#handleGenerateBtn" prefHeight="60.0" prefWidth="200.0" text="Сгенерировать"/>
-        <TextField fx:id="selectionSize" layoutX="276.0" layoutY="737.0"/>
+        <TextField fx:id="randomValuesQuantityTextField" layoutX="276.0" layoutY="737.0"/>
         <BarChart fx:id="bar3" layoutY="350.0" legendVisible="true" prefHeight="350.0" prefWidth="600.0">
             <xAxis>
                 <CategoryAxis side="BOTTOM"/>

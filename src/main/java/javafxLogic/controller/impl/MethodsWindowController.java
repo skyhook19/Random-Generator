@@ -1,7 +1,7 @@
 package javafxLogic.controller.impl;
 
 import algorithmLogic.DefaultRandom;
-import algorithmLogic.RandomAlgorithm;
+import algorithmLogic.AbstractRandomAlgorithm;
 import algorithmLogic.VonNeumannAlgorithm;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -18,8 +18,8 @@ import static javafxLogic.constants.Regions.*;
 public class MethodsWindowController extends AbstractController {
 
     @FXML
-    private TextField selectionSize;
-    private String chosenSelectionSize = "";
+    private TextField randomValuesQuantityTextField;
+    private String randomValuesQuantity = "";
 
     @FXML
     private BarChart defaultMethodBar;
@@ -31,7 +31,7 @@ public class MethodsWindowController extends AbstractController {
     private BarChart bar4;
 
     private List<BarChart> charts;
-    private List<RandomAlgorithm> algorithms;
+    private List<AbstractRandomAlgorithm> algorithms;
     private List<String> descriptions;
 
     protected void initialize() {
@@ -43,13 +43,6 @@ public class MethodsWindowController extends AbstractController {
             add(bar4);
         }};
 
-        algorithms = new ArrayList<RandomAlgorithm>() {{
-            add(new DefaultRandom());
-            add(new VonNeumannAlgorithm());
-            add(new DefaultRandom());
-            add(new DefaultRandom());
-        }};
-
         descriptions = new ArrayList<String>() {{
             add("Стандартный рандом");
             add("Фон-Неймана");
@@ -57,10 +50,10 @@ public class MethodsWindowController extends AbstractController {
             add("Метод половинных квадратов");
         }};
 
-        selectionSize.textProperty().addListener(
+        randomValuesQuantityTextField.textProperty().addListener(
                 (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
                     if (!newValue.matches("\\d*")) {
-                        selectionSize.setText(newValue.replaceAll("[^\\d]", ""));
+                        randomValuesQuantityTextField.setText(newValue.replaceAll("[^\\d]", ""));
                     }
                 });
     }
@@ -77,11 +70,11 @@ public class MethodsWindowController extends AbstractController {
             return;
         }
 
-        chosenSelectionSize = selectionSize.getText();
+        randomValuesQuantity = randomValuesQuantityTextField.getText();
 
         for (int i = 0; i < charts.size(); i++) {
             charts.get(i).getData().clear();
-            drawBars(algorithms.get(i).run(Integer.parseInt(chosenSelectionSize)), charts.get(i), descriptions.get(i));
+            drawBars(algorithms.get(i).generateArrayOfIndices(), charts.get(i), descriptions.get(i));
         }
     }
 
@@ -104,7 +97,7 @@ public class MethodsWindowController extends AbstractController {
     @Override
     protected String isInputValid() {
         String error = "";
-        String input = selectionSize.getText();
+        String input = randomValuesQuantityTextField.getText();
 
         if (input.isEmpty()) error += SELECTION_SIZE_IS_EMPTY + "\n";
         else if (input.startsWith("0")) error += NUMBER_STARTS_WITH_ZERO + "\n";
@@ -114,10 +107,15 @@ public class MethodsWindowController extends AbstractController {
     }
 
     private boolean doesSelectionSizeChanged() {
-        return !selectionSize.getText().equals(chosenSelectionSize);
+        return !randomValuesQuantityTextField.getText().equals(randomValuesQuantity);
     }
 
-    private double computeDispersion(int[] countOfEntrance) {
-        return 0;
+    private void initializeAlgorithms(int randomValuesQuantity){
+        algorithms = new ArrayList<AbstractRandomAlgorithm>() {{
+            add(new DefaultRandom(randomValuesQuantity));
+            add(new VonNeumannAlgorithm(randomValuesQuantity));
+            add(new DefaultRandom(randomValuesQuantity));
+            add(new DefaultRandom(randomValuesQuantity));
+        }};
     }
 }
