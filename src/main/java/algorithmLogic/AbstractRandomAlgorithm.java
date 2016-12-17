@@ -26,7 +26,7 @@ public abstract class AbstractRandomAlgorithm {
 
     public double computeDispersion(){
         double dispersion = 0;
-        double oneDivideN = 1/randomValues.length;
+        double oneDivideN = 1.0/randomValues.length;
 
         for (int i = 0; i < randomValues.length; i++) {
             dispersion += oneDivideN*(randomValues[i]-0.5)*(randomValues[i]-0.5);

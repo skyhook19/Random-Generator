@@ -2,14 +2,19 @@ package javafxLogic.controller.impl;
 
 import algorithmLogic.DefaultRandom;
 import algorithmLogic.AbstractRandomAlgorithm;
-import algorithmLogic.VonNeumannAlgorithm;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import javafxLogic.controller.AbstractController;
 
+import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.*;
 
 import static javafxLogic.constants.Errors.*;
@@ -70,12 +75,20 @@ public class MethodsWindowController extends AbstractController {
             return;
         }
 
-        randomValuesQuantity = randomValuesQuantityTextField.getText();
+        initializeAlgorithms(Integer.parseInt(randomValuesQuantityTextField.getText()));
+        String pattern = "##0.0000";
+        DecimalFormat decimalFormat = new DecimalFormat(pattern);
 
         for (int i = 0; i < charts.size(); i++) {
             charts.get(i).getData().clear();
-            drawBars(algorithms.get(i).generateArrayOfIndices(), charts.get(i), descriptions.get(i));
+            drawBars(algorithms.get(i).generateArrayOfIndices(), charts.get(i),
+                    descriptions.get(i) + ", Дисперсия = " + decimalFormat.format(algorithms.get(i).computeDispersion()));
         }
+    }
+
+    @FXML
+    private void handleExitBtn() {
+        setClientLoginWindowScene(mainWindow);
     }
 
     private void drawBars(int[] countOfEntrance, BarChart bar, String name) {
@@ -113,9 +126,24 @@ public class MethodsWindowController extends AbstractController {
     private void initializeAlgorithms(int randomValuesQuantity){
         algorithms = new ArrayList<AbstractRandomAlgorithm>() {{
             add(new DefaultRandom(randomValuesQuantity));
-            add(new VonNeumannAlgorithm(randomValuesQuantity));
+            add(new DefaultRandom(randomValuesQuantity));
             add(new DefaultRandom(randomValuesQuantity));
             add(new DefaultRandom(randomValuesQuantity));
         }};
+    }
+
+    public void setClientLoginWindowScene(Stage primaryStage) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MethodsWindowController.class.getResource("/fxml/ClientLoginWindow.fxml"));
+            Pane rootLayout = loader.load();
+            ClientLoginController controller = loader.getController();
+            controller.setMainWindow(primaryStage);
+            Scene scene = new Scene(rootLayout);
+            primaryStage.setTitle("Вход");
+            primaryStage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
