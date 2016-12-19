@@ -2,6 +2,7 @@ package javafxLogic.controller.impl;
 
 import algorithmLogic.DefaultRandom;
 import algorithmLogic.AbstractRandomAlgorithm;
+import algorithmLogic.MiddleCompositionMethod;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,9 +32,9 @@ public class MethodsWindowController extends AbstractController {
     @FXML
     private BarChart fonNeumannBar;
     @FXML
-    private BarChart bar3;
+    private BarChart middleCompositionBar;
     @FXML
-    private BarChart bar4;
+    private BarChart blumBlumShubBar;
 
     private List<BarChart> charts;
     private List<AbstractRandomAlgorithm> algorithms;
@@ -44,15 +45,15 @@ public class MethodsWindowController extends AbstractController {
         charts = new ArrayList<BarChart>() {{
             add(defaultMethodBar);
             add(fonNeumannBar);
-            add(bar3);
-            add(bar4);
+            add(middleCompositionBar);
+            add(blumBlumShubBar);
         }};
 
         descriptions = new ArrayList<String>() {{
             add("Стандартный рандом");
             add("Фон-Неймана");
-            add("Линейный конгруэнтный");
-            add("Метод половинных квадратов");
+            add("Метод серединных произведений");
+            add("Метод Блюма-Блюма-Шуба");
         }};
 
         randomValuesQuantityTextField.textProperty().addListener(
@@ -127,7 +128,7 @@ public class MethodsWindowController extends AbstractController {
         algorithms = new ArrayList<AbstractRandomAlgorithm>() {{
             add(new DefaultRandom(randomValuesQuantity));
             add(new DefaultRandom(randomValuesQuantity));
-            add(new DefaultRandom(randomValuesQuantity));
+            add(new MiddleCompositionMethod(randomValuesQuantity));
             add(new DefaultRandom(randomValuesQuantity));
         }};
     }
